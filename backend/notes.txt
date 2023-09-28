@@ -1,0 +1,94 @@
+1 - Set up the project
+
+Git init
+npm i express
+npm i pg
+
+2 - Set up servers
+
+3 - Set up db in psql
+
+\conninfo to check connection
+CREATE DATABASE [name]
+
+\c [dbname] to check if to connect to dbpostgres
+\! clear
+
+CREATE TABLE students (
+  ID SERIAL - auto increment id
+
+)
+
+4 - db.js
+
+const Pool = require ('pg).Pool;
+
+const pool = new Pool({
+	user: 'postgres',
+	host: 'localhost',
+	database: 'students',
+	password: undefined,
+	port: 5432,
+});
+
+module.exports = pool;
+
+5 - create routes, queries, controller
+
+const { Router } = require('express');
+const router = Router();
+const { getStudents, getStudentById, addStudent, removeStudent, updateStudent } = require('./controller');
+
+router.get('/', getStudents);
+router.get('/:id', getStudentById);
+router.post('/', addStudent);
+router.delete('/:id', removeStudent);
+router.patch('/:id', updateStudent);
+
+module.exports = router;
+
+
+6 - queries
+const getStudents = 'SELECT * FROM students';
+const getStudentById = 'SELECT * FROM students WHERE id = $1';
+const checkEmailExists = 'SELECT s FROM students s WHERE s.email = $1';
+const addStudent = 'INSERT INTO students (name, email, age, dob) VALUES ($1, $2, $3, $4)';
+const removeStudent = 'DELETE FROM students WHERE id = $1';
+const updateStudent = 'UPDATE students SET name = $1, email = $2 WHERE id = $3';
+
+module.exports = {
+	getStudents,
+	getStudentById,
+	checkEmailExists,
+	addStudent,
+	removeStudent,
+	updateStudent,
+};
+
+6 - controller for the business logic
+
+const pool = require('../../db');
+const queries = require('./queries');
+
+
+frontend backend client side server side rendering notes
+Review
+In this lesson, we learned about communication between the front-end and back-end of an application and the different ways of rendering a web app. Let’s recap some key takeaways from this lesson:
+
+Front-end web development concerns all aspects of a web app that a user can see and directly interact with.
+Back-end web development concerns how a website functions, and the storage and retrieval of data.
+The front-end and back-end of a web app communicate via an HTTP request/response cycle. The types of data that servers send to the browser include HTML documents, JavaScript, static assets, and formatted data.
+Websites can be rendered on the client-side or server-side. Hybrid rendering combines both of these approaches.
+With client-side rendering, JavaScript dynamically generates all content in the browser as the user navigates the site. Content is rendered quickly, after the initial page load.
+Client-side rendering is ideal for dynamic sites, with rich JavaScript interactions.
+With server-side rendering, the server sends the content to the browser. Static content is quickly viewable in the browser, but rich site interactions can take longer to load.
+Server-side rendering is ideal for mostly static sites, where there is not a lot of user interaction.
+Hybrid rendering models attempt to optimize speed, performance, and SEO by combining aspects of client and server-side rendering.
+
+
+
+Code Generation
+Code generation is the process of generating code and assets from a template, or specification. Code generation tools provide boilerplate code that allows for standardization, rapid development, and increased productivity. Using boilerplate code reduces the number of errors in the application, which helps with maintenance and is better for scalability.
+
+An example of a code generation tool that you may be familiar with is create-react-app, which can be used to generate code structure, allowing developers to focus on developing the application itself.
+
